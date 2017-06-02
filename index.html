@@ -1,37 +1,37 @@
 <html>
   <head>
     <style>
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(333deg, #53e39c, #53b8e3, #f457e3);
-  background-size: 600% 600%;
-  animation: slide 100s ease-in-out infinite;
-}
+			body {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(333deg, #53e39c, #53b8e3, #f457e3);
+				background-size: 600% 600%;
+				animation: slide 100s ease-in-out infinite;
+			}
 
-@keyframes slide {
-  0%{background-position:31% 0%}
-  50%{background-position:70% 100%}
-  100%{background-position:31% 0%}
-}
+			@keyframes slide {
+				0%{background-position:31% 0%}
+				50%{background-position:70% 100%}
+				100%{background-position:31% 0%}
+			}
 
-article {
-  font-family: 'Roboto', sans-serif; 
-  text-align: center;
-  color: white;
-}
+			article {
+				font-family: 'Roboto', sans-serif; 
+				text-align: center;
+				color: white;
+			}
 
-article header {
-  font-size: 60px;
-  font-weight: 300;
-  font-style: italic;
-}
+			article header {
+				font-size: 60px;
+				font-weight: 300;
+				font-style: italic;
+			}
 
-article div {
-  font-size: 250px;
-  font-weight: 500;
-}
+			article div {
+				font-size: 250px;
+				font-weight: 500;
+			}
     </style>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300i,500" rel="stylesheet">
   </head>
@@ -60,36 +60,42 @@ article div {
       },
     ];
 
-setInterval(function() {
-    let event_to_display = null;
-    let time_best_so_far = Number.MAX_VALUE;
-    for (let i = 0; i < events.length; i++) {
-      let contender_time = timeTill(events[i]);
-      if (contender_time > 0 && contender_time < time_best_so_far) {
-        time_best_so_far = contender_time;
-        event_to_display = events[i];
-      }
-    }
-    let header = document.getElementById("header");
-    let time = document.getElementById("timer");
-    if (event_to_display) {
-      header.innerText = event_to_display.name + " is happening in";
-      let distance = time_best_so_far;
-      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      let text = "";
-      if (hours > 0) {
-        text += ("0" + hours).slice(-2) + ":";
-      }
-      text += ("0" + minutes).slice(-2) + ":";
-      text += ("0" + seconds).slice(-2);
-      time.innerText = text;
-    } else {
-      header.innerText = "Nothing to wait for anymore...";
-      time.innerText = "";
-    }
-  }, 1000);
+		function display_dashboard() {
+			let event_to_display = null;
+			let time_best_so_far = Number.MAX_VALUE;
+			for (let i = 0; i < events.length; i++) {
+				let contender_time = timeTill(events[i]);
+				if (contender_time > -20*60*1000 && contender_time < time_best_so_far) {
+					time_best_so_far = contender_time;
+					event_to_display = events[i];
+				}
+			}
+			let header = document.getElementById("header");
+			let time = document.getElementById("timer");
+			if (event_to_display && time_best_so_far > 0) {
+				header.innerText = event_to_display.name + " is happening in";
+				let distance = time_best_so_far;
+				let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+				let text = "";
+				if (hours > 0) {
+					text += ("0" + hours).slice(-2) + ":";
+				}
+				text += ("0" + minutes).slice(-2) + ":";
+				text += ("0" + seconds).slice(-2);
+				time.innerText = text;
+			} else if (event_to_display && time_best_so_far < 0) {
+				header.innerText = "It's " + event_to_display.name + " time!";
+				time.innerText = "";
+			} else {
+				header.innerText = "Nothing to wait for anymore...";
+				time.innerText = "";
+			}
+		}
+
+		display_dashboard();
+		setInterval(display_dashboard, 1000);
 
     function timeTill(event) {
       return eventTime(event) - new Date().getTime();
