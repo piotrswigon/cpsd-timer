@@ -8,6 +8,7 @@
         background: linear-gradient(333deg, #53e39c, #53b8e3, #f457e3);
         background-size: 600% 600%;
         animation: slide 100s ease-in-out infinite;
+        text-shadow: 2px 2px 10px #000000;
       }
 
       @keyframes slide {
@@ -41,7 +42,7 @@
     </style>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300i,500" rel="stylesheet">
   </head>
-  <body>
+  <body id="body">
     <article>
       <header id="header"></header>
       <div id="timer"></div>
@@ -59,6 +60,7 @@
         name: "Cereal",
         time: "16:00",
         days: [1, 2, 3, 4],
+        background: 'center/150% url("cereal.jpg")',
       },
       {
         name: "TGIF",
@@ -80,6 +82,7 @@
       let header = document.getElementById("header");
       let time = document.getElementById("timer");
       let event = document.getElementById("event");
+      let body = document.getElementById("body");
       if (event_to_display && time_best_so_far > 0) {
         event.innerText = "";
         header.innerText = event_to_display.name + " is happening in";
@@ -94,6 +97,9 @@
         text += ("0" + minutes).slice(-2) + ":";
         text += ("0" + seconds).slice(-2);
         time.innerText = text;
+        if (event_to_display.background) {
+          body.style.background = event_to_display.background;
+        }
       } else if (event_to_display && time_best_so_far < 0) {
         event.innerText = "It's " + event_to_display.name + " time!";
         header.innerText = "";
@@ -111,7 +117,7 @@
     function timeTill(event) {
       return eventTime(event) - new Date().getTime();
     }
-    
+
     function eventTime(event) {
       if (!event.days.includes(new Date().getDay())) {
         // Good enough ;)
