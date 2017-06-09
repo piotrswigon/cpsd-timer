@@ -52,12 +52,21 @@
         name: "Lunch",
         time: "12:00",
         days: [1, 2, 3, 4, 5],
+        background: [
+          'url("salad.jpg")',
+          'url("sushi.jpg")',
+          'url("burgers.jpg")',
+          'url("noodles.jpg")',
+          'url("pizza.jpg")',
+        ]
       },
       {
         name: "Cereal",
         time: "16:00",
         days: [1, 2, 3, 4],
-        background: 'center/150% url("cereal.jpg")',
+        background: [
+          'center/150% url("cereal.jpg")'
+        ],
       },
       {
         name: "TGIF",
@@ -81,7 +90,8 @@
       let event = document.getElementById("event");
 
       document.body.style.background = (event_to_display && event_to_display.background)
-          ? event_to_display.background : '';
+          ? event_to_display.background[new Date().getDate() % event_to_display.background.length]
+          : '';
 
       if (event_to_display && time_best_so_far > 0) {
         event.innerText = "";
